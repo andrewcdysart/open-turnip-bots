@@ -7,6 +7,9 @@ class GenericQueueDb:
       self.open()
       self.__initializeTables__( tables )
 
+   def __del__( self ):
+      self.close()
+
    def __initializeTables__( self, tables ):
       cursor = self.connection.cursor()
 
@@ -25,10 +28,21 @@ class GenericQueueDb:
 
       self.commit()
 
-   def put( self, table, columns, values ):
+   def put( self, table, valueTuples ):
+      """
+         Insert a set of column, value tuples into the given table.
+      """
       cursor = None
 
+      columns = []
+      values = []
+      for column, value in valueTuples:
+         columns.append( column )
+         values.append( value )
+
       if len( columns ) != len( values ):
+         # TODO: This should probably be an exception, as it signals
+         # a misuse of the interface
          print( 'Column and value count did not match!' )
       else:
          query = 'INSERT INTO %s (' % table

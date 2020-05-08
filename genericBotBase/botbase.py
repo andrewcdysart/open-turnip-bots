@@ -78,7 +78,8 @@ initial_extensions = ['cogs.common',
                       'cogs.basic']
 
 bot = commands.Bot(command_prefix=get_prefix,
-                   description=config['base']['description'])
+                   description=config['base']['description'],
+                   case_insensitive=True)
 bot.help_command = commands.DefaultHelpCommand(dm_help=None)
 
 bot.log = log
